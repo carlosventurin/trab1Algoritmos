@@ -6,16 +6,18 @@ function prob1()
     syms y(x);
 
     %Cálculos da equação 1
-    eq1 = diff(y, x) == (x+y)/(x+1);
+    func1 = @(x,y) (x+y)/(x+1);
+    edo1 = diff(y, x) == (x+y)/(x+1);
     x0 = 0;
     y0 = 0;
     num = 1;
-    pviSol(eq1 , x0, y0, num);
+    pviSol(func1, edo1 , x0, y0, num);
 
     %Cálculos da equação 2
-    eq2 = diff(y, x) == (2/x^2) - (3*y/x);
+    func2 = @(x, y) (2/x^2) - (3*y/x);
+    edo2 = diff(y, x) == (2/x^2) - (3*y/x);
     x0 = 1;
     y0 = 2;
     num = 2;
-    pviSol(eq2, x0, y0, num);
+    pviSol(func2, edo2, x0, y0, num);
 end
