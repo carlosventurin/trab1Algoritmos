@@ -26,6 +26,7 @@ function pviSol(func, edo, x0 ,y0, num)
     [X, Yeuler] = euler(func, x0, y0, h, n); %Método de Euler
     [X, YeulerMelhorado] = eulerMelhorado(func, x0, y0, h, n); %Método de Euler Melhorado
     [X, YeulerModificado] = eulerModificado(func, x0, y0, h, n); %Método de Euler Modificado
+    [Xr, YrungeKutta] = rungeKutta(func, x0, y0, h, n); %Método de Runge-Kutta
 
     %Gráficos
     
@@ -37,8 +38,9 @@ function pviSol(func, edo, x0 ,y0, num)
     plot(xdisc, Yeuler, '-b', 'linewidth', 1);
     plot(xdisc, YeulerMelhorado, '-c', 'linewidth', 1);
     plot(xdisc, YeulerModificado, '-y', 'linewidth', 1);
+    plot(xdisc, YrungeKutta, '-g', 'linewidth', 1);
 
-    legenda = {'y(x)', 'Euler', 'Euler Melhorado', 'Euler Modificado'};
+    legenda = {'y(x)', 'Euler', 'Euler Melhorado', 'Euler Modificado', 'Runge-Kutta'};
     xlabel('x, xn');
     ylabel('y(xn), yn');
     title("PVI: y'=(x+y)/(x+1), y(0)=0 \n Solução: y(x)=x*log(x + 1) - x + log(x + 1)");
