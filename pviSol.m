@@ -25,16 +25,20 @@ function pviSol(func, edo, x0 ,y0, num)
     %Q4 - Aproximações da solução analítica
     [X, Yeuler] = euler(func, x0, y0, h, n); %Método de Euler
     [X, YeulerMelhorado] = eulerMelhorado(func, x0, y0, h, n); %Método de Euler Melhorado
+    [X, YeulerModificado] = eulerModificado(func, x0, y0, h, n); %Método de Euler Modificado
 
     %Gráficos
     
     figure(num);
     legenda = {};   % Inicializa célula que contém os rótulos dos objetos gráficos
     hold on;
+
     plot(xfino, yfino, '-r', 'linewidth', 1);
     plot(xdisc, Yeuler, '-b', 'linewidth', 1);
     plot(xdisc, YeulerMelhorado, '-c', 'linewidth', 1);
-    legenda = {'y(x)', 'Euler', 'Euler Melhorado'};    % Insere rótulo no final das células dos rótulos
+    plot(xdisc, YeulerModificado, '-y', 'linewidth', 1);
+
+    legenda = {'y(x)', 'Euler', 'Euler Melhorado', 'Euler Modificado'};
     xlabel('x, xn');
     ylabel('y(xn), yn');
     title("PVI: y'=(x+y)/(x+1), y(0)=0 \n Solução: y(x)=x*log(x + 1) - x + log(x + 1)");
