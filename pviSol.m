@@ -26,7 +26,9 @@ function pviSol(func, edo, x0 ,y0, num)
     [X, Yeuler] = euler(func, x0, y0, h, n); %Método de Euler
     [X, YeulerMelhorado] = eulerMelhorado(func, x0, y0, h, n); %Método de Euler Melhorado
     [X, YeulerModificado] = eulerModificado(func, x0, y0, h, n); %Método de Euler Modificado
-    [Xr, YrungeKutta] = rungeKutta(func, x0, y0, h, n); %Método de Runge-Kutta
+    [X, YrungeKutta] = rungeKutta(func, x0, y0, h, n); %Método de Runge-Kutta
+    [X, YdormandPrinceFixo] = dormandPrince(func, x0, y0, h, n, 1); %Método de Dormand-Prince com passo Fixo
+    [XdormandPrinceAdaptativo, YdormandPrinceAdaptativo] = dormandPrince(func, x0, y0, h, n, 0); %Método de Dormand-Prince com passo Adaptativo
 
     %Gráficos
     
@@ -39,8 +41,10 @@ function pviSol(func, edo, x0 ,y0, num)
     plot(xdisc, YeulerMelhorado, '-c', 'linewidth', 1);
     plot(xdisc, YeulerModificado, '-y', 'linewidth', 1);
     plot(xdisc, YrungeKutta, '-g', 'linewidth', 1);
+    plot(xdisc, YdormandPrinceFixo, '-k', 'linewidth', 1);
+    plot(XdormandPrinceAdaptativo, YdormandPrinceAdaptativo, '-m', 'linewidth', 1);
 
-    legenda = {'y(x)', 'Euler', 'Euler Melhorado', 'Euler Modificado', 'Runge-Kutta'};
+    legenda = {'y(x)', 'Euler', 'Euler Melhorado', 'Euler Modificado', 'Runge-Kutta', 'ODE45 fixo', 'ODE45 adap'};
     xlabel('x, xn');
     ylabel('y(xn), yn');
     title("PVI: y'=(x+y)/(x+1), y(0)=0 \n Solução: y(x)=x*log(x + 1) - x + log(x + 1)");
