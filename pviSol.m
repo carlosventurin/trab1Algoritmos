@@ -30,6 +30,20 @@ function pviSol(func, edo, x0 ,y0, num)
     [X, YdormandPrinceFixo] = dormandPrince(func, x0, y0, h, n, 1); %Método de Dormand-Prince com passo Fixo
     [XdormandPrinceAdaptativo, YdormandPrinceAdaptativo] = dormandPrince(func, x0, y0, h, n, 0); %Método de Dormand-Prince com passo Adaptativo
 
+    %Matriz com os resultados
+    resultado = [xdisc', ydisc', Yeuler', YeulerMelhorado', YeulerModificado', YrungeKutta', YdormandPrinceFixo'];
+
+    %{ 
+    %TIRAR COMENTARIO -----------------------------------------------------------
+    
+    %Tabelas
+    %Q7 - Tabela com os valores de cada método
+    fprintf('%11s | %11s | %11s | %11s | %11s | %11s | %11s |\n', 'x', 'Valor Exato', 'Euler', 'Euler Mel.', 'Euler Mod.', 'R-G Gen3', 'ODE45 Fixo');
+    fprintf('-------------------------------------------------------------------------------------------------\n');
+    fprintf('%11.6f | %11.6f | %11.6f | %11.6f | %11.6f | %11.6f | %11.6f |\n', resultado')
+    
+    %}
+
     %Gráficos
     
     figure(num);
@@ -38,6 +52,7 @@ function pviSol(func, edo, x0 ,y0, num)
 
     plot(xfino, yfino, '-r', 'linewidth', 1);
     plot(xdisc, Yeuler, '-b', 'linewidth', 1);
+    plot(xdisc, Yeuler, 'o')
     plot(xdisc, YeulerMelhorado, '-c', 'linewidth', 1);
     plot(xdisc, YeulerModificado, '-y', 'linewidth', 1);
     plot(xdisc, YrungeKutta, '-g', 'linewidth', 1);
