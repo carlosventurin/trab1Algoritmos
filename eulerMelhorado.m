@@ -11,9 +11,9 @@ function [X,Y] = eulerMelhorado(f, x0, y0, h, n)
     X(1) = x0;
     Y(1) = y0;
 
-	for i=2:n+1
-		y = y + 0.5*h*( f(x,y) + f(x+h,y+h*f(x,y)));
-		x = x + h;
-		X(i) = x; Y(i) = y;
-	end
+    for i=2:n+1
+        y = y + 0.5*h*( f(x,y) + f(x+h,y+h*f(x,y)));
+        x = x + h;
+        X(i) = x; Y(i) = y;
+    end
 end

@@ -14,8 +14,8 @@ function [X,Y] = eulerModificado(f, x0, y0, h, n)
     h2 = h/2.0;
 
     for i=2:n+1
-		y = y + h*f(x+h2, y+h2*f(x,y));
-		x = x + h;
-		X(i) = x; Y(i) = y;
-	end
+        y = y + h*f(x+h2, y+h2*f(x,y));
+        x = x + h;
+        X(i) = x; Y(i) = y;
+    end
 end
