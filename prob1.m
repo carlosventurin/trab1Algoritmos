@@ -13,9 +13,6 @@ function prob1()
     num = 1;
     pviSol(func1, edo1 , x0, y0, num);
 
-
-    %{ 
-    %TIRAR COMENTARIO -----------------------------------------------------------
     %Cálculos da equação 2
     func2 = @(x, y) (2/x^2) - (3*y/x);
     edo2 = diff(y, x) == (2/x^2) - (3*y/x);
@@ -23,6 +20,5 @@ function prob1()
     y0 = 2;
     num = 2;
     pviSol(func2, edo2, x0, y0, num);
-    %}
 
 end

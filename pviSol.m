@@ -33,31 +33,31 @@ function pviSol(func, edo, x0 ,y0, num)
     %Matriz com os resultados
     resultado = [xdisc', ydisc', Yeuler', YeulerMelhorado', YeulerModificado', YrungeKutta', YdormandPrinceFixo'];
 
-    %{ 
-    %TIRAR COMENTARIO -----------------------------------------------------------
+    %Cálculo dos Erros
+    erroExato = abs(ydisc-ydisc);
+    erroEuler = abs(ydisc-Yeuler);
+    erroEulerMelhorado = abs(ydisc-YeulerMelhorado);
+    erroEulerModificado = abs(ydisc-YeulerModificado);
+    erroRungeKutta = abs(ydisc-YrungeKutta);
+    erroDormandPrinceFixo = abs(ydisc-YdormandPrinceFixo);
+    erroDormandPrinceAdap = abs(s(XdormandPrinceAdaptativo) - YdormandPrinceAdaptativo);
     
-    %Tabelas
-    %Q7 - Tabela com os valores de cada método
-    fprintf('%11s | %11s | %11s | %11s | %11s | %11s | %11s |\n', 'x', 'Valor Exato', 'Euler', 'Euler Mel.', 'Euler Mod.', 'R-G Gen3', 'ODE45 Fixo');
-    fprintf('-------------------------------------------------------------------------------------------------\n');
-    fprintf('%11.6f | %11.6f | %11.6f | %11.6f | %11.6f | %11.6f | %11.6f |\n', resultado')
-    
-    %}
+    %Matriz com os resultados de erros
+    erroResultado = [xdisc', erroExato', erroEuler', erroEulerMelhorado', erroEulerModificado', erroRungeKutta', erroDormandPrinceFixo'];
 
     %Gráficos
-    
+    %Q5 - Pontos de cada método junto com a função verdadeira
     figure(num);
     legenda = {};   % Inicializa célula que contém os rótulos dos objetos gráficos
     hold on;
 
     plot(xfino, yfino, '-r', 'linewidth', 1);
-    plot(xdisc, Yeuler, '-b', 'linewidth', 1);
-    plot(xdisc, Yeuler, 'o')
-    plot(xdisc, YeulerMelhorado, '-c', 'linewidth', 1);
-    plot(xdisc, YeulerModificado, '-y', 'linewidth', 1);
-    plot(xdisc, YrungeKutta, '-g', 'linewidth', 1);
-    plot(xdisc, YdormandPrinceFixo, '-k', 'linewidth', 1);
-    plot(XdormandPrinceAdaptativo, YdormandPrinceAdaptativo, '-m', 'linewidth', 1);
+    plot(xdisc, Yeuler, '-b|', 'linewidth', 1);
+    plot(xdisc, YeulerMelhorado, '-co', 'linewidth', 1);
+    plot(xdisc, YeulerModificado, '-y*', 'linewidth', 1);
+    plot(xdisc, YrungeKutta, '-gd', 'linewidth', 1);
+    plot(xdisc, YdormandPrinceFixo, '-kx', 'linewidth', 1);
+    plot(XdormandPrinceAdaptativo, YdormandPrinceAdaptativo, '-ms', 'MarkerSize', 3, 'linewidth', 1);
 
     legenda = {'y(x)', 'Euler', 'Euler Melhorado', 'Euler Modificado', 'Runge-Kutta', 'ODE45 fixo', 'ODE45 adap'};
     xlabel('x, xn');
@@ -65,6 +65,34 @@ function pviSol(func, edo, x0 ,y0, num)
     title("PVI: y'=(x+y)/(x+1), y(0)=0 \n Solução: y(x)=x*log(x + 1) - x + log(x + 1)");
     legend(legenda, 'location', 'northeast');
     hold off;
-    shg;
     
+    %Q6 - Gráfico de erros de cada método relativo à função verdadeira
+    figure(num+2);
+    hold on;
+    warning('off', 'all');
+    semilogy(xdisc, erroEuler, '-b|', 'linewidth', 1);
+    semilogy(xdisc, erroEulerMelhorado, '-co', 'linewidth', 1);
+    semilogy(xdisc, erroEulerModificado, '-y*', 'linewidth', 1);
+    semilogy(xdisc, erroRungeKutta, '-gd', 'linewidth', 1);
+    semilogy(xdisc, erroDormandPrinceFixo, '-kx', 'linewidth', 1);
+    semilogy(XdormandPrinceAdaptativo, erroDormandPrinceAdap, '-ms', 'MarkerSize', 3, 'linewidth', 1);
+    
+    legenda = {'Euler', 'Euler Melhorado', 'Euler Modificado', 'Runge-Kutta', 'ODE45 fixo', 'ODE45 adap'};
+    xlabel('x');
+    ylabel('ln(Erro)');
+    title("PVI: y'=(x+y)/(x+1), y(0)=0 \n Solução: y(x)=x*log(x + 1) - x + log(x + 1)");
+    legend(legenda, 'location', 'northeast');
+    
+    shg;
+
+    %Tabelas
+    %Q7 - Tabela com os valores de cada método
+    fprintf('%12s | %12s | %12s | %12s | %12s | %12s | %12s |\n', 'x', 'Valor Exato', 'Euler', 'Euler Mel.', 'Euler Mod.', 'R-G Gen3', 'ODE45 Fixo');
+    fprintf('--------------------------------------------------------------------------------------------------------\n');
+    fprintf('%12.6f | %12.6f | %12.6f | %12.6f | %12.6f | %12.6f | %12.6f |\n', resultado');
+    
+    %Q8 - Tabela com os erros de cada método
+    disp('Erros')
+    fprintf('%12.6f | %12.6e | %12.6e | %12.6e | %12.6e | %12.6e | %12.6e |\n', erroResultado');
+
 end
