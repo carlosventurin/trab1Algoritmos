@@ -69,7 +69,7 @@ function pviSol(func, edo, x0 ,y0, num)
     %Q6 - Gráfico de erros de cada método relativo à função verdadeira
     figure(num+2);
     hold on;
-    warning('off', 'all');
+    %warning('off', 'all');
     semilogy(xdisc, erroEuler, '-b|', 'linewidth', 1);
     semilogy(xdisc, erroEulerMelhorado, '-co', 'linewidth', 1);
     semilogy(xdisc, erroEulerModificado, '-y*', 'linewidth', 1);
