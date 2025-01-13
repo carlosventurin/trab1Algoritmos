@@ -1,57 +1,62 @@
 function relaxLinear(t0, v0)
-    syms v(t);
+    syms v(t); %r roAgua rof g mi V me mf p;
 
-    r = 5e-4;
+    r = sym(5)/10000; %5e-4 
     roAgua = 1000;
-    rof = 1.225;
-    g = 9.81;
-    mi = 17.2e-6;
+    rof = sym(1225)/1000; %1.225 
+    g =  sym(981)/100; %9.81
+    mi = sym(172)/10000000; %17.2e-6 
+    p = sym(pi);
 
-    V = 4/3*pi*r^3;
+    V = sym(4)/3*p*r^3;
     me = V*roAgua;
     mf = V*rof;
     
-    func = @(t, v) g*(1 - mf/me) - 6*pi*mi*r*v/me;
-    edo = diff(v, t) == g*(1 - mf/me) - 6*pi*mi*r*v/me;
-    disp('------------------------------------------------------------------------------------------------------------------------------------')
+    func = @(t, v) double(g * (1 - mf / me)) - 6 * double(p * mi * r / me) * v;
+    edo = diff(v, t) == g*(1 - mf/me) - 6*p*mi*r*v/me;
     
     %Q1 - Cálculo da velocidade final
-    vFinal = g*(me - mf)/(6*pi*mi*r);
+    vFinal = g*(me - mf)/(6*p*mi*r);
+    vFinalNum = double(vFinal);
     
-    %Q3 - Solução analítica dos PVI
+    %Q3 - Solução analítica do PVI
+    sol = dsolve(edo, v(t0) == v0);
 
-    %{
-    sol = dsolve(edo, y(x0) == y0);
-    disp(sol);
-
-    %Q2 - Conversão das soluções em funções não-simbólicas
+    %Q4 - Evolução da velocidade
     s = matlabFunction(sol);
 
-    %Q3 - Discretização da variável independente a partir de x0
-    n = 5;
-    h = 1/10;
-    dx = h/10;
+    n = 50;
+    h = 5/10;
+    dt = h/10;
 
-    xdisc = x0:h:(x0 + n*h);
-    ydisc = s(xdisc);
-    xfino = x0:dx:(x0 + n*h);
-    yfino = s(xfino);
-    %}
+    tdisc = t0:h:(t0 + n*h);
+    vdisc = s(tdisc);
+    tfino = t0:dt:(t0 + n*h);
+    vfino = s(tfino);
 
-    %Gráficos
+    %Q5 - Sequência dos valores aproximados pelo método de Euler
+    [tEuler, vEuler] = euler(func, t0, v0, h, n);
+    
+
     figure(5);
     legenda = {};   % Inicializa célula que contém os rótulos dos objetos gráficos
     hold on;
+    %Q2 - Desenho da velocidade final como reta horizontal assintótica no gráfico
+    plot([0 25], [vFinalNum vFinalNum],  '--r', 'linewidth', 1);
+    %Q4 - Desenho da evoluçao da velocidade
+    plot(tfino, vfino, '-r', 'linewidth', 1);
+    %Q5 - Desenho dos valores aproximados pelo método de Euler
+    plot(tEuler, vEuler, 'bx');
 
-    plot([0 25], [vFinal vFinal]);
 
-    %{
-    legenda = {'y(x)'};
-    xlabel('x, xn');
-    ylabel('y(xn), yn');
-    title("PVI: y'=(x+y)/(x+1), y(0)=0 \n Solução: y(x)=x*log(x + 1) - x + log(x + 1)");
-    legend(legenda, 'location', 'northeast');
+    legenda = {'vinf para relaxação linear', 'Re << 1:v(0) = 0.00', 'Euler relaxação linear'};
+    xlabel('t [s]');
+    ylabel('v [m/s]');
+    title("Relaxação de velocidade com força de arrasto");
+    legend(legenda, 'location', 'southeast');
     hold off;
-    %}
-   
+    shg;
+
+
+    
 end
