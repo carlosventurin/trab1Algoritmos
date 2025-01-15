@@ -1,24 +1,29 @@
 function prob2()
     syms v(t);
 
+    %Variáveis físicas disponibilizadas
     r = sym(5)/10000; %5e-4 
     roAgua = 1000;
     rof = sym(1225)/1000; %1.225 
     g =  sym(981)/100; %9.81
     mi = sym(172)/10000000; %17.2e-6 
-    p = sym(pi);
     Cd = sym(4)/1000;
 
+    p = sym(pi);
+
+    %Definição do passo e do número de passos
     n = 50;
     h = 5/10;
     dt = h/2;
 
+    %Cálculo das variáveis
     A = p*r^2;
     V = sym(4)/3*p*r^3;
     me = V*roAgua;
     mf = V*rof;
     alfa = Cd*rof*A/(2*me);
 
+    
     %Relaxação Linear
     t0 = 0;
     v0 = 0;
@@ -27,6 +32,7 @@ function prob2()
     vFinalLin = g*(me - mf)/(6*p*mi*r);
     vFinalLinNum = double(vFinalLin);
     
+    %Definição das equações
     func = @(t, v) double(g * (1 - mf / me)) - 6 * double(p * mi * r / me) * v;
     edo = diff(v, t) == g*(1 - mf/me) - 6*p*mi*r*v/me;
 
@@ -49,11 +55,12 @@ function prob2()
     vFinalNao = sqrt(g*(1 - mf/me) / alfa);
     vFinalNaoNum = double(vFinalNao);
 
+    %Definição das equações
     func2 = @(t, v) double(g * (1 - mf / me)) - double(Cd*rof*A/(2*me)) * v^2;
     eqNao = @(t) vFinalNaoNum * ((v0 + vFinalNaoNum) + (v0 - vFinalNaoNum).*exp(-2*double(alfa)*vFinalNaoNum.*t)) ./ ((v0 + vFinalNaoNum) - (v0 - vFinalNaoNum).*exp(-2*double(alfa)*vFinalNaoNum.*t));
 
     %Q4 - Evolução da velocidade
-    tNao = linspace(t0, (t0 + n*h), 500);
+    tNao = linspace(t0, (t0 + n*h), n/dt);
     vNao = eqNao(tNao);
 
     %Q5 - Sequência dos valores aproximados pelo método de Euler
@@ -75,6 +82,7 @@ function prob2()
     %Q5 - Desenho dos valores aproximados pelo método de Euler
     plot(tEulerLin, vEulerLin, 'bx');
 
+
     %Relaxação Não Linear
     %Q2 - Desenho da velocidade final como reta horizontal assintótica no gráfico
     plot([0 25], [vFinalNaoNum vFinalNaoNum],  '--m', 'linewidth', 1);
@@ -93,4 +101,6 @@ function prob2()
     hold off;
     shg;
 
+    %Salvar gráfico
+    saveas(figure(5), fullfile('graficos', sprintf('graficoRelaxacao.png')));
 end
